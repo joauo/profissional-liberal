@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   PALETA DO SITE — Altere apenas as variáveis abaixo para trocar todo o tema
+   ============================================================================ */
+:root {
+  /* Fundos e superfícies */
+  --bg-canvas: #0F1115;
+  --bg-surface: #171A20;
+  --bg-surface-elevated: #1E222A;
+  --bg-media-placeholder: #14171D;
+
+  /* Tipografia */
+  --text-primary: #F2EFE8;
+  --text-secondary: #B4B0A8;
+  --text-muted: #7F7C75;
+  --text-on-accent: #0F1115;
+
+  /* Destaque dourado suave */
+  --accent-gold: #C9A96A;
+  --accent-gold-hover: #D8BA7E;
+  --accent-gold-soft: rgba(201, 169, 106, 0.14);
+  --accent-gold-border: rgba(201, 169, 106, 0.36);
+  --accent-gold-glow: rgba(201, 169, 106, 0.18);
+
+  /* Bordas e divisores */
+  --border-subtle: rgba(242, 239, 232, 0.08);
+  --border-medium: rgba(242, 239, 232, 0.14);
+
+  /* Sombras e sobreposições */
+  --shadow-card-hover: 0 20px 44px -18px rgba(0, 0, 0, 0.72), 0 0 28px -8px rgba(201, 169, 106, 0.14);
+  --scrim-hero: linear-gradient(90deg, #0F1115 0%, rgba(15, 17, 21, 0.88) 46%, rgba(15, 17, 21, 0.42) 100%);
+
+  /* Fontes */
+  --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Curvas e raios */
+  --radius-card: 12px;
+  --radius-button: 8px;
+}
+
+@layer base {
+  html {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 3px;
+  }
+}
+
+/* Marquee contínuo com pausa no hover */
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 34s linear infinite;
+  will-change: transform;
+}
+
+.marquee-container:hover .marquee-track,
+.marquee-container:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}
