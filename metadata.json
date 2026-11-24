@@ -1,6 +1,8 @@
 {
-  "name": "[Nome do Profissional] — Modelo Editorial para Profissionais Liberais",
+  "name": "Profissional liberal",
   "description": "Modelo demonstrativo de landing page de autoridade para profissionais liberais com tema grafite, destaque dourado e animações de rolagem.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

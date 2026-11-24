@@ -18,6 +18,40 @@ import { EDITORIAL_EASE, SectionHeader } from './MotionPrimitives';
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 
+interface EmbeddedGoogleMapProps {
+  lat: number;
+  lng: number;
+  title: string;
+}
+
+function EmbeddedGoogleMap({ lat, lng, title }: EmbeddedGoogleMapProps) {
+  const [resetTick, setResetTick] = useState(0);
+  const embedUrl = `https://maps.google.com/maps?q=${lat},${lng}&hl=pt-BR&z=15&output=embed&_r=${resetTick}`;
+
+  return (
+    <div className="relative h-full w-full bg-[var(--bg-media-placeholder)]">
+      <iframe
+        key={resetTick}
+        title={title}
+        src={embedUrl}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        allowFullScreen
+        className="h-full w-full border-0"
+      />
+
+      <button
+        type="button"
+        onClick={() => setResetTick((prev) => prev + 1)}
+        className="absolute bottom-4 left-4 z-10 inline-flex min-h-[40px] items-center gap-2 rounded-[var(--radius-button)] border border-[var(--border-medium)] bg-[#0F1115]/90 px-3.5 py-2 text-xs font-medium text-[var(--text-primary)] shadow-lg backdrop-blur-md transition-colors hover:border-[var(--accent-gold-border)] hover:text-[var(--accent-gold)]"
+      >
+        <LocateFixed className="h-3.5 w-3.5 text-[var(--accent-gold)]" aria-hidden="true" />
+        <span>Centralizar endereço</span>
+      </button>
+    </div>
+  );
+}
+
 function MapInner() {
   const map = useMap();
   const isLoaded = useApiIsLoaded();
@@ -40,24 +74,11 @@ function MapInner() {
     loadingStatus === APILoadingStatus.AUTH_FAILURE
   ) {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center bg-[var(--bg-media-placeholder)] p-8 text-center">
-        <MapPin className="h-7 w-7 text-[var(--accent-gold)]" aria-hidden="true" />
-        <p className="mt-4 text-sm font-medium text-[var(--text-primary)]">
-          Não foi possível carregar o mapa interativo no momento.
-        </p>
-        <p className="mt-1.5 max-w-md text-xs text-[var(--text-secondary)]">
-          {addressLine} · {neighborhood}
-        </p>
-        <a
-          href={`https://www.google.com/maps/search/?api=1&query=${coordinates.lat},${coordinates.lng}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-5 inline-flex min-h-[42px] items-center gap-2 rounded-[var(--radius-button)] border border-[var(--accent-gold-border)] bg-[var(--accent-gold-soft)] px-4 py-2 text-xs font-medium text-[var(--accent-gold)] transition-colors hover:bg-[var(--accent-gold)] hover:text-[var(--text-on-accent)]"
-        >
-          <Navigation className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>Abrir no Google Maps</span>
-        </a>
-      </div>
+      <EmbeddedGoogleMap
+        lat={coordinates.lat}
+        lng={coordinates.lng}
+        title={`Mapa de localização — ${SITE_CONTENT.professional.name}`}
+      />
     );
   }
 
@@ -221,24 +242,11 @@ export function LocationSection() {
                   <MapInner />
                 </APIProvider>
               ) : (
-                <div className="flex h-full w-full flex-col items-center justify-center p-8 text-center">
-                  <MapPin className="h-7 w-7 text-[var(--accent-gold)]" aria-hidden="true" />
-                  <p className="mt-4 text-sm font-medium text-[var(--text-primary)]">
-                    Mapa do Google Maps
-                  </p>
-                  <p className="mt-1.5 max-w-md text-xs text-[var(--text-secondary)]">
-                    {addressLine} · {neighborhood}
-                  </p>
-                  <a
-                    href={mapsDirectionsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-5 inline-flex min-h-[42px] items-center gap-2 rounded-[var(--radius-button)] bg-[var(--accent-gold)] px-5 py-2.5 text-xs font-medium text-[var(--text-on-accent)] transition-colors hover:bg-[var(--accent-gold-hover)]"
-                  >
-                    <Navigation className="h-3.5 w-3.5" aria-hidden="true" />
-                    <span>Abrir localização no Google Maps</span>
-                  </a>
-                </div>
+                <EmbeddedGoogleMap
+                  lat={coordinates.lat}
+                  lng={coordinates.lng}
+                  title={`Mapa de localização — ${SITE_CONTENT.professional.name}`}
+                />
               )}
             </div>
           </motion.div>
